@@ -7,6 +7,8 @@ class ProductPage(BasePage):
     def add_product_button_click(self):
         add_product_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
         add_product_button.click()
+        if "?promo=" in self.url:
+            self.solve_quiz_and_get_code()
 
     def should_be_add_product_button(self):
         assert self.is_element_present(*ProductPageLocators.ADD_TO_BASKET_BUTTON), \

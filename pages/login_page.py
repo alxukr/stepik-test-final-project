@@ -6,12 +6,16 @@ class LoginPage(BasePage):
 
     def register_new_user(self, email, password):
         email_field = self.browser.find_element(*LoginPageLocators.REGISTER_EMAIL_FIELD)
+        self.scroll_to_element(email_field)
         email_field.send_keys(email)
         password_field = self.browser.find_element(*LoginPageLocators.REGISTER_PASSWORD_FIELD)
+        self.scroll_to_element(password_field)
         password_field.send_keys(password)
         password_confirm_field = self.browser.find_element(*LoginPageLocators.REGISTER_PASSWORD_CONFIRM_FIELD)
+        self.scroll_to_element(password_confirm_field)
         password_confirm_field.send_keys(password)
         register_button = self.browser.find_element(*LoginPageLocators.REGISTER_BUTTON)
+        self.scroll_to_element(register_button)
         register_button.click()
 
     def should_be_login_form(self):

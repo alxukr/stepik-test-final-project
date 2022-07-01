@@ -14,6 +14,7 @@ class BasePage:
 
     def go_to_login_page(self):
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
+        self.scroll_to_element(link)
         link.click()
 
     def is_disappeared(self, how, what, timeout=4):
@@ -45,7 +46,11 @@ class BasePage:
 
     def go_to_basket_page(self):
         basket_link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
+        self.scroll_to_element(basket_link)
         basket_link.click()
+
+    def scroll_to_element(self, element):
+        self.browser.execute_script("return arguments[0].scrollIntoView(true);", element)
 
     def should_be_authorized_user(self):
         assert self.is_element_present(*BasePageLocators.USER_ICON), \
@@ -68,3 +73,12 @@ class BasePage:
             alert.accept()
         except NoAlertPresentException:
             print("No second alert presented")
+
+    def wait_for_value_in_element(self, locator, value):
+        try:
+            WebDriverWait(self.browser, 5).until(
+                EC.text_to_be_present_in_element(locator, value)
+            )
+            return True
+        except TimeoutException:
+            return False

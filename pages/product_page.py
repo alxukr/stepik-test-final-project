@@ -6,6 +6,7 @@ class ProductPage(BasePage):
 
     def add_product_button_click(self):
         add_product_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
+        self.scroll_to_element(add_product_button)
         add_product_button.click()
         if "?promo=" in self.url:
             self.solve_quiz_and_get_code()
@@ -16,15 +17,13 @@ class ProductPage(BasePage):
 
     def should_be_cost_of_basket_equals_price_of_product(self):
         product_price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
-        basket_cost = self.browser.find_element(*ProductPageLocators.MESSAGE_BASKET_PRICE).text
-        assert product_price == basket_cost, \
-            "The cost of the basket does not match the price of the product"
+        result = self.wait_for_value_in_element(ProductPageLocators.MESSAGE_BASKET_PRICE, product_price)
+        assert result, "The cost of the basket does not match the price of the product"
 
     def should_be_message_product_name_equals_product_name(self):
-        message_product_name = self.browser.find_element(*ProductPageLocators.MESSAGE_PRODUCT_NAME).text
         product_name = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text
-        assert product_name == message_product_name, \
-            "The name of the added product does not equal the product name"
+        result = self.wait_for_value_in_element(ProductPageLocators.MESSAGE_PRODUCT_NAME, product_name)
+        assert result, "The name of the added product does not equal the product name"
 
     def should_be_message_with_the_cost_of_the_cart(self):
         assert self.is_element_present(*ProductPageLocators.MESSAGE_BASKET), \
